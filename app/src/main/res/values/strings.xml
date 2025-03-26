@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DOJOChallenge</string>
+    <string name="authorization_token">Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNzY2OGJlNDUzYzU3OGJlNTkxZjA4MWNiN2NkMTA2MCIsIm5iZiI6MTc0MjQ4MjkwNC43OTksInN1YiI6IjY3ZGMyZGQ4OGFmNDUyZjMwZmU5ZjNjMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MK7VeDkvdyRaUS8o3oYc-XOmT7n4yLa5KgLh04Yv6lg</string>
+</resources>
