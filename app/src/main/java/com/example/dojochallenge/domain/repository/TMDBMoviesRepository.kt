@@ -11,4 +11,22 @@ interface TMDBMoviesRepository {
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ): Flow<TMDBMovieModel>
+
+    fun fetchPopularMovieList(
+        onStart: () -> Unit,
+        onComplete: () -> Unit,
+        onError: (String?) -> Unit
+    ): Flow<List<TMDBMovieModel>>
+
+    fun fetchTopRatedMovieList(
+        onStart: () -> Unit,
+        onComplete: () -> Unit,
+        onError: (String?) -> Unit
+    ): Flow<List<TMDBMovieModel>>
+
+    fun fetchNowPlayingMovieList(
+        onStart: () -> Unit,
+        onComplete: () -> Unit,
+        onError: (String?) -> Unit
+    ): Flow<List<TMDBMovieModel>>
 }

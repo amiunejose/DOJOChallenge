@@ -1,15 +1,17 @@
 package com.example.dojochallenge.data.repository
 
-import android.util.Log
-import com.example.dojochallenge.data.model.TMDBPeopleModel
+import androidx.annotation.WorkerThread
+import com.example.dojochallenge.data.dto.toDomainModelList
+import com.example.dojochallenge.data.model.TMDBPopularPeopleModel
+import com.example.dojochallenge.data.model.updateWithDetail
 import com.example.dojochallenge.data.network.people.TMDBPeopleApiClient
 import com.example.dojochallenge.domain.repository.TMDBPeopleRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -18,17 +20,18 @@ class TMDBPeopleRepositoryImpl @Inject constructor(
     @Named("io") private val ioDispatcher: CoroutineDispatcher
 ) : TMDBPeopleRepository {
 
+    @WorkerThread
     override fun fetchPopularPeopleList(
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) = flow {
-        var popularPeopleList = emptyList<TMDBPeopleModel>() // esta variable deberia inicializarse con una llamada a la DB local
+        var popularPeopleList = emptyList<TMDBPopularPeopleModel>() // esta variable deberia inicializarse con una llamada a la DB local
         try {
             val response = apiClient.fetchPopularPeopleList()
             if (response.isSuccessful) {
                 response.body()?.let {
-                    popularPeopleList = it.results
+                    popularPeopleList = it.toDomainModelList()
                     emit(popularPeopleList)
                 } ?: onError("Null body response")
             } else {
@@ -41,12 +44,22 @@ class TMDBPeopleRepositoryImpl @Inject constructor(
     }.onStart { onStart() }.onCompletion { onComplete() }.flowOn(ioDispatcher)
 
 
+    @WorkerThread
     override fun fetchMostPopularPeople(
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) = fetchPopularPeopleList(onStart, onComplete, onError)
-        .map { popularPeopleList ->
-            popularPeopleList.firstOrNull() ?: throw NoSuchElementException("empty list error")
+        .transform { popularPeopleList ->
+            val mostPopular = popularPeopleList.firstOrNull()
+                ?: throw NoSuchElementException("Empty list error")
+            val detailResponse = apiClient.fetchPeopleDetailById(mostPopular.id)
+            if (detailResponse.isSuccessful) {
+                detailResponse.body()?.let { detailData ->
+                    emit(mostPopular.updateWithDetail(detailData))
+                } ?: onError("Detail body is null")
+            } else {
+                onError(detailResponse.errorBody()?.string() ?: detailResponse.message())
+            }
         }
 }

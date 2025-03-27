@@ -1,9 +1,18 @@
 package com.example.dojochallenge.data.model
 
-import com.google.gson.annotations.SerializedName
+import com.example.dojochallenge.data.utils.ImageMapper
 
 data class TMDBMovieModel(
-    @SerializedName("id") val id: Int = 0,
-    @SerializedName("original_title") val originalTitle: String = "",
-    @SerializedName("overview") val overview: String = ""
-)
+    val id: Int = 0,
+    val originalTitle: String = "",
+    val overview: String = "",
+    val posterPathImage: String = "",
+    val releaseDate: String = "",
+    val voteAverage: Float = 0f
+){
+    val fullPosterPathImageW300xH450: String
+        get() = ImageMapper.getFullImagePathW300xH450(posterPathImage)
+
+    val fullPosterPathImageW600xH900: String
+        get() = ImageMapper.getFullImagePathW600xH900(posterPathImage)
+}

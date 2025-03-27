@@ -1,6 +1,8 @@
 package com.example.dojochallenge.data.di
 
+import com.example.dojochallenge.data.repository.TMDBMoviesRepositoryImpl
 import com.example.dojochallenge.data.repository.TMDBPeopleRepositoryImpl
+import com.example.dojochallenge.domain.repository.TMDBMoviesRepository
 import com.example.dojochallenge.domain.repository.TMDBPeopleRepository
 import dagger.Binds
 import dagger.Module
@@ -13,4 +15,7 @@ internal interface DataModule {
 
     @Binds
     fun providePeopleRepository(tmdbPeopleRepositoryImpl: TMDBPeopleRepositoryImpl): TMDBPeopleRepository
+
+    @Binds
+    fun provideMoviesRepository(tmdbMoviesRepositoryImpl: TMDBMoviesRepositoryImpl): TMDBMoviesRepository
 }

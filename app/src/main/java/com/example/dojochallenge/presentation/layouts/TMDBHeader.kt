@@ -25,7 +25,7 @@ import com.example.dojochallenge.ui.theme.Pink80
 import com.example.dojochallenge.ui.theme.Purple40
 
 @Composable
-fun TMDBHeader(title: String, previousScreen: String = "", onBackPressed: () -> Unit) {
+fun TMDBHeader(title: String, previousScreen: String = "", onBackPressed: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

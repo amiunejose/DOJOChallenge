@@ -1,6 +1,6 @@
 package com.example.dojochallenge.domain.repository
 
-import com.example.dojochallenge.data.model.TMDBPeopleModel
+import com.example.dojochallenge.data.model.TMDBPopularPeopleModel
 import kotlinx.coroutines.flow.Flow
 
 interface TMDBPeopleRepository {
@@ -9,11 +9,11 @@ interface TMDBPeopleRepository {
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit
-    ): Flow<List<TMDBPeopleModel>>
+    ): Flow<List<TMDBPopularPeopleModel>>
 
     fun fetchMostPopularPeople(
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit
-    ): Flow<TMDBPeopleModel>
+    ): Flow<TMDBPopularPeopleModel>
 }
