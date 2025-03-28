@@ -1,8 +1,11 @@
 package com.example.dojochallenge.data.repository
 
+import android.util.Log
 import androidx.annotation.WorkerThread
-import com.example.dojochallenge.data.dto.toDomainModelList
-import com.example.dojochallenge.data.model.TMDBPopularPeopleModel
+import com.example.dojochallenge.data.database.dao.TMDBPopularPeopleDao
+import com.example.dojochallenge.data.database.mapper.asDomain
+import com.example.dojochallenge.data.database.mapper.asEntity
+import com.example.dojochallenge.data.dto.toDomainModel
 import com.example.dojochallenge.data.model.updateWithDetail
 import com.example.dojochallenge.data.network.people.TMDBPeopleApiClient
 import com.example.dojochallenge.domain.repository.TMDBPeopleRepository
@@ -17,7 +20,8 @@ import javax.inject.Named
 
 class TMDBPeopleRepositoryImpl @Inject constructor(
     private val apiClient: TMDBPeopleApiClient,
-    @Named("io") private val ioDispatcher: CoroutineDispatcher
+    @Named("io") private val ioDispatcher: CoroutineDispatcher,
+    private val popularPeopleDao: TMDBPopularPeopleDao
 ) : TMDBPeopleRepository {
 
     @WorkerThread
@@ -26,21 +30,27 @@ class TMDBPeopleRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) = flow {
-        var popularPeopleList = emptyList<TMDBPopularPeopleModel>() // esta variable deberia inicializarse con una llamada a la DB local
-        try {
-            val response = apiClient.fetchPopularPeopleList()
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    popularPeopleList = it.toDomainModelList()
-                    emit(popularPeopleList)
-                } ?: onError("Null body response")
-            } else {
-                val errorMessage = response.errorBody()?.string() ?: response.message()
-                onError(errorMessage)
+        var popularPeopleList = popularPeopleDao.getPeopleList().asDomain() // Get from DB first
+        if (popularPeopleList.isEmpty()) {
+            try {
+                val response = apiClient.fetchPopularPeopleList()
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        popularPeopleList = it.toDomainModel() // Get from API
+                        popularPeopleDao.insertPeopleList(popularPeopleList.asEntity()) // Updated DB
+                        emit(popularPeopleDao.getPeopleList().asDomain()) // Get from DB updated
+                    } ?: onError("Null body response")
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: response.message()
+                    onError(errorMessage)
+                }
+            } catch (e: Exception) {
+                throw e
             }
-        } catch (e: Exception) {
-            onError(e.message)
+        } else {
+            emit(popularPeopleList) // If DB is not empty return DB entity
         }
+
     }.onStart { onStart() }.onCompletion { onComplete() }.flowOn(ioDispatcher)
 
 

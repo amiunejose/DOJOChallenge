@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt)
     id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     alias(libs.plugins.jetbrainsKotlinSerialization)
 }
 
@@ -54,12 +55,17 @@ dependencies {
     //Dagger Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.constraintlayout)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     //Glide
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    ksp(libs.glide.compiler)
+
+    //Room
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.room.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

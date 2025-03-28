@@ -12,8 +12,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dojochallenge.R
+import com.example.dojochallenge.presentation.layouts.TextLong
 import com.example.dojochallenge.presentation.layouts.Text_h2
-import com.example.dojochallenge.presentation.layouts.Text_h5
 
 @Composable
 fun BiographySection(biography: String) {
@@ -21,7 +21,8 @@ fun BiographySection(biography: String) {
         Column {
             Text_h2("Biography")
             Spacer(modifier = Modifier.height(10.dp))
-            Text_h5(biography)}
+            TextLong(biography)
+        }
     }
 }
 

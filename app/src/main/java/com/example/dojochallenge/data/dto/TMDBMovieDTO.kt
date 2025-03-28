@@ -1,15 +1,16 @@
 package com.example.dojochallenge.data.dto
 
 import com.example.dojochallenge.data.model.TMDBMovieModel
+import com.example.dojochallenge.data.repository.TMDBMoviesRepositoryImpl
 import com.google.gson.annotations.SerializedName
 
-data class TMDBMovieModelListDTO(
+data class TMDBMovieListDTO(
     @SerializedName("page") val page: Int,
     @SerializedName("results") val results: List<TMDBMovieModelDTO>
 )
 
-fun TMDBMovieModelListDTO.toDomainModel(): List<TMDBMovieModel> {
-    return results.map { it.toDomainModel() }
+fun TMDBMovieListDTO.toDomainModel(category: TMDBMoviesRepositoryImpl.MovieCategory): List<TMDBMovieModel> {
+    return results.map { it.toDomainModel(category = category.category) }
 }
 
 data class TMDBMovieModelDTO(
@@ -21,7 +22,7 @@ data class TMDBMovieModelDTO(
     @SerializedName("vote_average") val voteAverage: Float
 )
 
-fun TMDBMovieModelDTO.toDomainModel(): TMDBMovieModel {
+fun TMDBMovieModelDTO.toDomainModel(category: String = ""): TMDBMovieModel {
     return try {
         TMDBMovieModel(
             id = id,
@@ -29,7 +30,8 @@ fun TMDBMovieModelDTO.toDomainModel(): TMDBMovieModel {
             overview = overview,
             posterPathImage = posterPathImage,
             releaseDate = releaseDate,
-            voteAverage = voteAverage
+            voteAverage = voteAverage,
+            category = category
         )
     } catch (e: Exception) {
         TMDBMovieModel()

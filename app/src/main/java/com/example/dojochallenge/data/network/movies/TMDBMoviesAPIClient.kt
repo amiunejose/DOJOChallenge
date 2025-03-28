@@ -2,7 +2,7 @@ package com.example.dojochallenge.data.network.movies
 
 import android.util.Log
 import com.example.dojochallenge.data.dto.TMDBMovieModelDTO
-import com.example.dojochallenge.data.dto.TMDBMovieModelListDTO
+import com.example.dojochallenge.data.dto.TMDBMovieListDTO
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
@@ -22,7 +22,7 @@ class TMDBMoviesAPIClient @Inject constructor(private val service: TMDBMoviesSer
         }
     }
 
-    suspend fun fetchPopularMovieList(): Response<TMDBMovieModelListDTO> {
+    suspend fun fetchPopularMovieList(): Response<TMDBMovieListDTO> {
         return try {
             service.getPopularMovieList()
         } catch (e: Exception) {
@@ -34,7 +34,7 @@ class TMDBMoviesAPIClient @Inject constructor(private val service: TMDBMoviesSer
         }
     }
 
-    suspend fun fetchTopRatedMovieList(): Response<TMDBMovieModelListDTO> {
+    suspend fun fetchTopRatedMovieList(): Response<TMDBMovieListDTO> {
         return try {
             service.getTopRatedMovieList()
         } catch (e: Exception) {
@@ -46,7 +46,7 @@ class TMDBMoviesAPIClient @Inject constructor(private val service: TMDBMoviesSer
         }
     }
 
-    suspend fun fetchNowPlayingMovieList(): Response<TMDBMovieModelListDTO> {
+    suspend fun fetchNowPlayingMovieList(): Response<TMDBMovieListDTO> {
         return try {
             service.getNowPlayingMovieList()
         } catch (e: Exception) {

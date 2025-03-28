@@ -9,7 +9,7 @@ data class TMBDPopularPeopleListDTO(
     @SerializedName("results") val results: List<TMDBPopularPeopleDTO> = emptyList()
 )
 
-fun TMBDPopularPeopleListDTO.toDomainModelList(): List<TMDBPopularPeopleModel> {
+fun TMBDPopularPeopleListDTO.toDomainModel(): List<TMDBPopularPeopleModel> {
     return results.map { it.toDomainModel() }
 }
 

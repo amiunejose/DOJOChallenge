@@ -2,7 +2,9 @@ package com.example.dojochallenge.data.model
 
 import com.example.dojochallenge.data.dto.TMDBPeopleDetailsDTO
 import com.example.dojochallenge.data.utils.ImageMapper
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class TMDBPopularPeopleModel(
     val id: Int = 0,
     val name: String = "",
@@ -27,7 +29,7 @@ fun TMDBPopularPeopleModel.updateWithDetail(detail: TMDBPeopleDetailsDTO): TMDBP
     )
 }
 
-
+@Serializable
 data class KnownForImageModel(
     val title: String = "",
     val posterPathImage: String = "",
