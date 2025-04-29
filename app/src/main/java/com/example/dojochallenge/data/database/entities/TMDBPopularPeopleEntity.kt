@@ -14,5 +14,6 @@ data class TMDBPopularPeopleEntity(
     @ColumnInfo(name = "profile_path") val profilePathImage: String,
     @ColumnInfo(name = "known_for") val knownFor: List<KnownForImageModel>,
     @ColumnInfo(name = "biography") val biography: String,
-    @ColumnInfo(name = "birthday") val birthday: String
+    @ColumnInfo(name = "birthday") val birthday: String,
+    @ColumnInfo(name = "orderId") val orderId: Int
 )

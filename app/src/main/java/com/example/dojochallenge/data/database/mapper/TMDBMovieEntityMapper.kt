@@ -6,7 +6,7 @@ import com.example.dojochallenge.data.model.TMDBMovieModel
 object TMDBMovieEntityMapper : EntityMapper<List<TMDBMovieModel>, List<TMDBMovieEntity>> {
 
     override fun asEntity(domain: List<TMDBMovieModel>): List<TMDBMovieEntity> {
-        return domain.map { movie ->
+        return domain.mapIndexed { index, movie ->
             TMDBMovieEntity(
                 id = movie.id,
                 originalTitle = movie.originalTitle,
@@ -14,7 +14,8 @@ object TMDBMovieEntityMapper : EntityMapper<List<TMDBMovieModel>, List<TMDBMovie
                 posterPathImage = movie.posterPathImage,
                 releaseDate = movie.releaseDate,
                 voteAverage = movie.voteAverage,
-                category = movie.category
+                category = movie.category,
+                orderId = index
             )
         }
     }

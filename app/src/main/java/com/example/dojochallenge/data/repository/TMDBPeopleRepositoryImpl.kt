@@ -1,6 +1,5 @@
 package com.example.dojochallenge.data.repository
 
-import android.util.Log
 import androidx.annotation.WorkerThread
 import com.example.dojochallenge.data.database.dao.TMDBPopularPeopleDao
 import com.example.dojochallenge.data.database.mapper.asDomain
@@ -31,26 +30,23 @@ class TMDBPeopleRepositoryImpl @Inject constructor(
         onError: (String?) -> Unit
     ) = flow {
         var popularPeopleList = popularPeopleDao.getPeopleList().asDomain() // Get from DB first
-        if (popularPeopleList.isEmpty()) {
-            try {
-                val response = apiClient.fetchPopularPeopleList()
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        popularPeopleList = it.toDomainModel() // Get from API
-                        popularPeopleDao.insertPeopleList(popularPeopleList.asEntity()) // Updated DB
-                        emit(popularPeopleDao.getPeopleList().asDomain()) // Get from DB updated
-                    } ?: onError("Null body response")
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: response.message()
-                    onError(errorMessage)
-                }
-            } catch (e: Exception) {
-                throw e
+        try {
+            val response = apiClient.fetchPopularPeopleList()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    popularPeopleList = it.toDomainModel() // Get from API
+                    popularPeopleDao.insertPeopleList(popularPeopleList.asEntity()) // Updated DB
+                    emit(popularPeopleList)
+                } ?: onError("Null body response")
+            } else {
+                val errorMessage = response.errorBody()?.string() ?: response.message()
+                onError(errorMessage)
+                emit(popularPeopleList)
             }
-        } else {
-            emit(popularPeopleList) // If DB is not empty return DB entity
+        } catch (e: Exception) {
+            emit(popularPeopleList)
+            throw e
         }
-
     }.onStart { onStart() }.onCompletion { onComplete() }.flowOn(ioDispatcher)
 
 

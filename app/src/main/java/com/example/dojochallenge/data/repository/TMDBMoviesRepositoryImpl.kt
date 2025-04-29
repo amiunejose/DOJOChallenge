@@ -34,25 +34,24 @@ class TMDBMoviesRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) = flow {
-        var movieList = movieDao.getMovieListByCategory(MovieCategory.POPULAR.category).asDomain() // Get from DB first
-        if (movieList.isEmpty()) {
-            try {
-                val response = apiClient.fetchPopularMovieList()
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        movieList = it.toDomainModel(MovieCategory.POPULAR) // Get from API
-                        movieDao.insertMovieList(movieList.asEntity()) // Updated DB
-                        emit(movieDao.getMovieListByCategory(MovieCategory.POPULAR.category).asDomain()) // Get from updated DB
-                    } ?: onError("Null body response")
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: response.message()
-                    onError(errorMessage)
-                }
-            } catch (e: Exception) {
-                onError(e.message)
+        var movieList = movieDao.getMovieListByCategory(MovieCategory.POPULAR.category)
+            .asDomain() // Get from DB first
+        try {
+            val response = apiClient.fetchPopularMovieList()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    movieList = it.toDomainModel(MovieCategory.POPULAR) // Get from API
+                    movieDao.insertMovieList(movieList.asEntity()) // Updated DB
+                    emit(movieList) // Get from updated DB
+                } ?: onError("Null body response")
+            } else {
+                emit(movieList)
+                val errorMessage = response.errorBody()?.string() ?: response.message()
+                onError(errorMessage)
             }
-        } else {
+        } catch (e: Exception) {
             emit(movieList)
+            onError(e.message)
         }
     }.onStart { onStart() }.onCompletion { onComplete() }.flowOn(ioDispatcher)
 
@@ -62,25 +61,24 @@ class TMDBMoviesRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) = flow {
-        var movieList = movieDao.getMovieListByCategory(MovieCategory.TOP_RATED.category).asDomain() // Get from DB first
-        if (movieList.isEmpty()) {
-            try {
-                val response = apiClient.fetchTopRatedMovieList()
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        movieList = it.toDomainModel(MovieCategory.TOP_RATED) // Get from API
-                        movieDao.insertMovieList(movieList.asEntity()) // Updated DB
-                        emit(movieDao.getMovieListByCategory(MovieCategory.TOP_RATED.category).asDomain()) // Get from updated DB
-                    } ?: onError("Null body response")
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: response.message()
-                    onError(errorMessage)
-                }
-            } catch (e: Exception) {
-                onError(e.message)
+        var movieList = movieDao.getMovieListByCategory(MovieCategory.TOP_RATED.category)
+            .asDomain() // Get from DB first
+        try {
+            val response = apiClient.fetchTopRatedMovieList()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    movieList = it.toDomainModel(MovieCategory.TOP_RATED) // Get from API
+                    movieDao.insertMovieList(movieList.asEntity()) // Updated DB
+                    emit(movieList) // Get from updated DB
+                } ?: onError("Null body response")
+            } else {
+                emit(movieList)
+                val errorMessage = response.errorBody()?.string() ?: response.message()
+                onError(errorMessage)
             }
-        } else {
+        } catch (e: Exception) {
             emit(movieList)
+            onError(e.message)
         }
     }.onStart { onStart() }.onCompletion { onComplete() }.flowOn(ioDispatcher)
 
@@ -90,25 +88,24 @@ class TMDBMoviesRepositoryImpl @Inject constructor(
         onComplete: () -> Unit,
         onError: (String?) -> Unit
     ) = flow {
-        var movieList = movieDao.getMovieListByCategory(MovieCategory.NOW_PLAYING.category).asDomain() // Get from DB first
-        if (movieList.isEmpty()) {
-            try {
-                val response = apiClient.fetchNowPlayingMovieList()
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        movieList = it.toDomainModel(MovieCategory.NOW_PLAYING) // Get from API
-                        movieDao.insertMovieList(movieList.asEntity()) // Updated DB
-                        emit(movieDao.getMovieListByCategory(MovieCategory.NOW_PLAYING.category).asDomain()) // Get from updated DB
-                    } ?: onError("Null body response")
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: response.message()
-                    onError(errorMessage)
-                }
-            } catch (e: Exception) {
-                onError(e.message)
+        var movieList = movieDao.getMovieListByCategory(MovieCategory.NOW_PLAYING.category)
+            .asDomain() // Get from DB first
+        try {
+            val response = apiClient.fetchNowPlayingMovieList()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    movieList = it.toDomainModel(MovieCategory.NOW_PLAYING) // Get from API
+                    movieDao.insertMovieList(movieList.asEntity()) // Updated DB
+                    emit(movieList) // Get from updated DB
+                } ?: onError("Null body response")
+            } else {
+                emit(movieList)
+                val errorMessage = response.errorBody()?.string() ?: response.message()
+                onError(errorMessage)
             }
-        } else {
+        } catch (e: Exception) {
             emit(movieList)
+            onError(e.message)
         }
     }.onStart { onStart() }.onCompletion { onComplete() }.flowOn(ioDispatcher)
 

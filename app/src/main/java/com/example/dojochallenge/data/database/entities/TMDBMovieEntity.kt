@@ -12,5 +12,6 @@ data class TMDBMovieEntity(
     @ColumnInfo("poster_path") val posterPathImage: String,
     @ColumnInfo("release_date") val releaseDate: String,
     @ColumnInfo("vote_average") val voteAverage: Float,
-    @ColumnInfo("category") val category: String
+    @ColumnInfo("category") val category: String,
+    @ColumnInfo("orderId") val orderId: Int
 )

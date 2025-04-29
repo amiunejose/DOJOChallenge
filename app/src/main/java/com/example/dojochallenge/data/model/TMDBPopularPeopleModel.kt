@@ -24,8 +24,8 @@ data class TMDBPopularPeopleModel(
 
 fun TMDBPopularPeopleModel.updateWithDetail(detail: TMDBPeopleDetailsDTO): TMDBPopularPeopleModel {
     return this.copy(
-        biography = detail.biography,
-        birthday = detail.birthday
+        biography = detail.biography ?: this.biography,
+        birthday = detail.birthday?: this.birthday
     )
 }
 

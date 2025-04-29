@@ -6,7 +6,7 @@ import com.example.dojochallenge.data.model.TMDBPopularPeopleModel
 object TMDBPopularPeopleEntityMapper : EntityMapper<List<TMDBPopularPeopleModel>, List<TMDBPopularPeopleEntity>> {
 
     override fun asEntity(domain: List<TMDBPopularPeopleModel>): List<TMDBPopularPeopleEntity> {
-        return domain.map { person ->
+        return domain.mapIndexed { index, person ->
             TMDBPopularPeopleEntity(
                 id = person.id,
                 name = person.name,
@@ -15,8 +15,8 @@ object TMDBPopularPeopleEntityMapper : EntityMapper<List<TMDBPopularPeopleModel>
                 profilePathImage = person.profilePathImage,
                 knownFor = person.knownFor,
                 biography = person.biography,
-                birthday = person.birthday
-
+                birthday = person.birthday,
+                orderId = index
             )
         }
     }

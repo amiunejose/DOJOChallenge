@@ -9,7 +9,7 @@ import com.example.dojochallenge.data.database.entities.TMDBMovieEntity
 @Dao
 interface TMDBMovieDao {
 
-    @Query("SELECT * FROM TMDBMovieEntity WHERE category = :category")
+    @Query("SELECT * FROM TMDBMovieEntity WHERE category = :category ORDER BY orderId")
     suspend fun getMovieListByCategory(category: String): List<TMDBMovieEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -11,7 +11,7 @@ import com.example.dojochallenge.data.database.entities.TMDBPopularPeopleEntity
 
 @Database(
     entities = [TMDBPopularPeopleEntity::class, TMDBMovieEntity::class],
-    version = 3
+    version = 5
 )
 @TypeConverters(value = [KnownForImageConverter::class])
 abstract class Database: RoomDatabase() {

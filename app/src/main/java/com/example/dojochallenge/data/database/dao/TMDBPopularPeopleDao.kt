@@ -9,7 +9,7 @@ import com.example.dojochallenge.data.database.entities.TMDBPopularPeopleEntity
 @Dao
 interface TMDBPopularPeopleDao {
 
-    @Query("SELECT * FROM TMDBPopularPeopleEntity")
+    @Query("SELECT * FROM TMDBPopularPeopleEntity ORDER BY orderId")
     suspend fun getPeopleList():List<TMDBPopularPeopleEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
