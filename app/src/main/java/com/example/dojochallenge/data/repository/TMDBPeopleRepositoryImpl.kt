@@ -65,6 +65,7 @@ class TMDBPeopleRepositoryImpl @Inject constructor(
                     emit(mostPopular.updateWithDetail(detailData))
                 } ?: onError("Detail body is null")
             } else {
+                emit(mostPopular)
                 onError(detailResponse.errorBody()?.string() ?: detailResponse.message())
             }
         }
